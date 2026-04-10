@@ -1,202 +1,207 @@
-HTML
 <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TedarikHub | Corporate ERP</title>
+    <title>TedarikHub | ELITE PERFORMANCE 2026</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #000000; overflow: hidden; }
+        :root { --main: #000; --bg: #fff; --accent: #1e40af; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(--main); overflow: hidden; }
         .hidden-section { display: none !important; }
+
+        /* BRUTALIST SUPREMACY DESIGN */
+        input, select { border: 4px solid #000 !important; border-radius: 0px !important; padding: 18px; font-weight: 900; font-size: 1.1rem; background: #fff; outline: none !important; transition: 0.1s; }
+        input:focus { background: #000; color: #fff; box-shadow: 10px 10px 0px #e2e8f0; }
         
-        /* BLACK LABEL DESIGN: Sade ve Pahalı Görünüm */
-        input, select { border: 1px solid #e5e7eb !important; border-radius: 8px !important; padding: 12px 16px; outline: none !important; transition: all 0.2s; background: #f9fafb; font-size: 0.9rem; }
-        input:focus { border-color: #000 !important; background: #fff; box-shadow: 0 0 0 2px rgba(0,0,0,0.05); }
+        button { border: 4px solid #000; border-radius: 0px !important; font-weight: 900; text-transform: uppercase; transition: 0.2s; padding: 18px 36px; letter-spacing: 2px; position: relative; }
+        button:hover { background: #000; color: #fff; transform: translate(-8px, -8px); box-shadow: 12px 12px 0px #000; }
+        button:active { transform: translate(0,0); box-shadow: none; }
+
+        /* NAVIGATION & SIDEBAR */
+        .sidebar { background: #fff; border-right: 8px solid #000; z-index: 100; }
+        .nav-item { padding: 25px 35px; cursor: pointer; font-weight: 900; font-size: 12px; border-bottom: 2px solid #000; transition: 0.2s; letter-spacing: 3px; position: relative; }
+        .nav-item:hover { background: #000; color: #fff; padding-left: 45px; }
+        .active-nav { background: #000 !important; color: #fff !important; border-left: 15px solid #1e40af; }
+
+        /* CARDS & DATA GRID */
+        .elite-card { background: #fff; border: 6px solid #000; padding: 40px; box-shadow: 20px 20px 0px #000; position: relative; }
+        .elite-card::before { content: "TH_ELITE_SYSTEM"; position: absolute; top: 10px; right: 15px; font-size: 9px; font-weight: 900; opacity: 0.2; }
         
-        button { border-radius: 8px !important; font-weight: 600; transition: all 0.2s; font-size: 0.85rem; }
-        .btn-primary { background: #000; color: #fff; padding: 12px 24px; }
-        .btn-primary:hover { background: #262626; }
-        
-        .sidebar { background: #fdfdfd; border-right: 1px solid #f1f1f1; }
-        .nav-item { padding: 14px 24px; cursor: pointer; font-weight: 500; font-size: 0.85rem; color: #666; border-radius: 8px; margin: 4px 16px; transition: 0.2s; }
-        .nav-item:hover { background: #f5f5f5; color: #000; }
-        .active-nav { background: #000 !important; color: #fff !important; font-weight: 600; }
-        
-        .stat-card { background: #fff; border: 1px solid #f1f1f1; border-radius: 16px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
-        .data-table { width: 100%; border-collapse: separate; border-spacing: 0; }
-        .data-table th { background: #f9fafb; padding: 16px; font-size: 0.75rem; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #f1f1f1; }
-        .data-table td { padding: 20px 16px; border-bottom: 1px solid #f9f9f9; font-size: 0.9rem; }
+        .data-table thead { background: #000; color: #fff; }
+        .data-table th { padding: 20px; text-transform: uppercase; font-size: 10px; letter-spacing: 4px; }
+        .data-table td { padding: 25px 20px; border-bottom: 4px solid #f1f5f9; font-weight: 900; font-size: 1.1rem; }
+
+        /* REAL PRINT ENGINE */
+        @media print {
+            .no-print { display: none !important; }
+            #s-fatura { display: block !important; position: absolute; top: 0; left: 0; width: 100%; border: none !important; box-shadow: none !important; padding: 0 !important; }
+            body { background: white; }
+            .elite-card { border: none !important; box-shadow: none !important; }
+        }
     </style>
 </head>
 <body class="h-screen w-screen flex">
 
-    <div id="auth-gate" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#f9fafb]">
-        <div class="w-full max-w-sm p-10 bg-white border border-gray-100 rounded-[32px] shadow-2xl">
-            <div class="text-center mb-10">
-                <div class="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mx-auto mb-6">
-                    <i class="fa-solid fa-shield-halved text-white text-2xl"></i>
-                </div>
-                <h1 class="text-2xl font-black tracking-tight">TedarikHub ERP</h1>
-                <p class="text-gray-400 text-sm mt-2">Kurumsal hesabınıza giriş yapın</p>
+    <div id="auth-gate" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white">
+        <div class="w-full max-w-lg p-16 border-[15px] border-black bg-white shadow-[40px_40px_0px_0px_#000]">
+            <div class="mb-12">
+                <h1 class="text-7xl font-[950] tracking-tighter uppercase italic leading-none border-b-[10px] border-black pb-4">GİRİŞ</h1>
+                <p class="font-black text-xs mt-4 tracking-[8px] uppercase opacity-30 italic">TedarikHub // Elit Performans</p>
             </div>
-            <form id="auth-form" class="space-y-4">
-                <input type="text" id="op-id" placeholder="Kullanıcı Adı" required class="w-full">
-                <input type="password" id="op-key" placeholder="Şifre" required class="w-full">
-                <button type="submit" class="w-full btn-primary mt-4 py-4">Sistemi Başlat</button>
+            <form id="auth-form" class="space-y-6">
+                <input type="text" id="op-id" placeholder="YÖNETİCİ KİMLİĞİ" required class="w-full">
+                <input type="password" id="op-key" placeholder="GÜVENLİK ŞİFRESİ" required class="w-full">
+                <button type="submit" class="w-full bg-black text-white p-6 text-3xl font-black italic">ERİŞİMİ BAŞLAT</button>
             </form>
-            <p id="auth-error" class="text-red-500 text-xs font-semibold mt-4 hidden text-center italic">Kimlik bilgileri doğrulanmadı.</p>
+            <p id="auth-error" class="text-red-600 text-xs font-black mt-6 hidden text-center italic uppercase tracking-widest">! KİMLİK DOĞRULAMA HATASI !</p>
         </div>
     </div>
 
     <div id="app" class="hidden-section flex h-full w-full">
-        <aside class="w-72 sidebar flex flex-col no-print">
-            <div class="p-10 mb-6">
-                <h1 class="text-xl font-black tracking-tight">TEDARİKHUB</h1>
-                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Management Cloud</p>
+        <aside class="w-96 sidebar flex flex-col no-print">
+            <div class="p-12 border-b-[10px] border-black bg-black text-white">
+                <h1 class="text-3xl font-[950] tracking-tighter uppercase italic leading-none">TH_CORP</h1>
+                <span class="text-[9px] font-bold tracking-[6px] opacity-40 uppercase">Elite Edition v.2026</span>
             </div>
-            <nav class="flex-grow">
-                <div onclick="tab('dash')" id="t-dash" class="nav-item active-nav"><i class="fa-solid fa-chart-pie mr-3"></i> Genel Bakış</div>
-                <div onclick="tab('inv')" id="t-inv" class="nav-item"><i class="fa-solid fa-box mr-3"></i> Stok Yönetimi</div>
-                <div onclick="tab('fin')" id="t-fin" class="nav-item"><i class="fa-solid fa-vault mr-3"></i> Finans Analizi</div>
-                <div onclick="tab('bill')" id="t-bill" class="nav-item"><i class="fa-solid fa-file-invoice mr-3"></i> Fatura Oluşturucu</div>
-                <div onclick="tab('core')" id="t-core" class="nav-item"><i class="fa-solid fa-gear mr-3"></i> Sistem Ayarları</div>
+            <nav class="flex-grow overflow-y-auto">
+                <div onclick="tab('dash')" id="t-dash" class="nav-item active-nav uppercase">01 // KONTROL PANELİ</div>
+                <div onclick="tab('stok')" id="t-stok" class="nav-item uppercase">02 // ENVANTER MERKEZİ</div>
+                <div onclick="tab('finans')" id="t-finans" class="nav-item uppercase">03 // KAR ANALİZÖRÜ</div>
+                <div onclick="tab('fatura')" id="t-fatura" class="nav-item uppercase">04 // PROFESYONEL FATURA</div>
+                <div onclick="tab('ayar')" id="t-ayar" class="nav-item uppercase">05 // SİSTEM ÇEKİRDEĞİ</div>
             </nav>
-            <div class="p-8 border-t border-gray-50">
-                <button onclick="location.reload()" class="w-full py-3 text-xs font-bold text-gray-400 hover:text-red-500 transition">Oturumu Kapat</button>
+            <div class="p-10 border-t-[10px] border-black bg-gray-50 space-y-4">
+                <div class="flex justify-between text-[10px] font-black uppercase"><span>Veri Senkronu</span><span id="load-val">0%</span></div>
+                <div class="h-5 border-4 border-black p-1"><div id="load-bar" class="h-full bg-blue-600"></div></div>
+                <button onclick="location.reload()" class="w-full p-4 text-[10px] font-black text-red-600 border-4 border-red-600 uppercase hover:bg-red-600 hover:text-white transition">GÜVENLİ ÇIKIŞ</button>
             </div>
         </aside>
 
-        <main class="flex-1 overflow-y-auto bg-white">
-            <header class="px-12 py-8 flex justify-between items-center sticky top-0 bg-white/80 backdrop-blur-md z-50 no-print">
-                <h2 id="view-title" class="text-2xl font-black tracking-tight">Genel Bakış</h2>
-                <div class="flex gap-4">
-                    <div class="relative">
-                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-gray-300 text-sm"></i>
-                        <input type="text" id="search" onkeyup="search()" placeholder="Veritabanında ara..." class="!pl-10 text-xs w-64 !bg-gray-50 border-none">
-                    </div>
-                    <button onclick="exportX()" class="bg-black text-white px-6 py-3 text-xs rounded-full">Excel Aktar</button>
+        <main class="flex-1 overflow-y-auto flex flex-col">
+            <header class="p-12 border-b-[10px] border-black flex justify-between items-end sticky top-0 bg-white/95 backdrop-blur z-50 no-print">
+                <div>
+                    <h2 id="view-title" class="text-8xl font-[950] tracking-tighter uppercase italic leading-none">PANEL</h2>
+                    <p class="text-[11px] font-black text-blue-600 tracking-[10px] mt-4 uppercase">Sistem Durumu: Çevrimiçi // Şifreleme: AES-256</p>
+                </div>
+                <div class="flex gap-6">
+                    <input type="text" id="search" onkeyup="search()" placeholder="VERİ ARA..." class="w-80 border-4 font-black text-xs">
+                    <button onclick="exportX()" class="bg-black text-white px-10 font-black">EXCEL</button>
                 </div>
             </header>
 
-            <div class="p-12 space-y-12">
-                <section id="s-dash" class="space-y-10">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div class="stat-card">
-                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Kayıtlı Ürün</p>
-                            <h3 id="stat-c" class="text-4xl font-black mt-2">0</h3>
-                        </div>
-                        <div class="stat-card">
-                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Envanter Değeri</p>
-                            <h3 id="stat-v" class="text-4xl font-black mt-2">₺0</h3>
-                        </div>
-                        <div class="stat-card">
-                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Sistem Sağlığı</p>
-                            <h3 class="text-4xl font-black mt-2 text-green-500">%100</h3>
-                        </div>
+            <div class="p-20 space-y-20 no-print">
+                <section id="s-dash" class="space-y-16 animate-in fade-in duration-500">
+                    <div class="grid grid-cols-1 md:grid-cols-4 border-[10px] border-black divide-x-[10px] divide-black shadow-[30px_30px_0px_0px_#000] bg-white">
+                        <div class="p-10"><p class="text-[10px] font-black opacity-30 uppercase tracking-[4px]">Aktif Ürün</p><h3 id="stat-c" class="text-7xl font-[950] mt-2 mono italic leading-none">0</h3></div>
+                        <div class="p-10"><p class="text-[10px] font-black opacity-30 uppercase tracking-[4px]">Net Değer</p><h3 id="stat-v" class="text-6xl font-[950] mt-2 mono italic leading-none">₺0</h3></div>
+                        <div class="p-10"><p class="text-[10px] font-black opacity-30 uppercase tracking-[4px]">Net Kâr</p><h3 id="stat-p" class="text-6xl font-[950] mt-2 mono italic text-green-600 leading-none">₺0</h3></div>
+                        <div class="p-10 bg-black text-white text-center flex flex-col justify-center"><p class="text-[10px] font-black opacity-50 uppercase tracking-[4px]">Durum</p><h3 class="text-5xl font-[950] mt-2 mono animate-pulse">LIVE</h3></div>
                     </div>
-                    <div class="bg-white border border-gray-100 rounded-[32px] p-10">
-                        <h4 class="text-sm font-bold text-gray-400 uppercase mb-8 tracking-widest text-center">Performans Grafiği</h4>
-                        <canvas id="vChart" height="80"></canvas>
+                    <div class="elite-card">
+                        <canvas id="vChart" height="90"></canvas>
                     </div>
                 </section>
 
-                <section id="s-inv" class="hidden-section space-y-8">
-                    <div class="bg-gray-50 p-10 rounded-[32px] border border-gray-100">
-                        <h4 class="text-lg font-black mb-8 tracking-tight">Yeni Ürün Girişi</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                            <input type="text" id="in-n" placeholder="Ürün / Toptancı Adı">
-                            <input type="number" id="in-b" placeholder="Alış Fiyatı">
-                            <input type="number" id="in-s" placeholder="Satış Fiyatı">
-                            <input type="number" id="in-q" placeholder="Stok Adedi">
+                <section id="s-stok" class="hidden-section space-y-12">
+                    <div class="elite-card bg-gray-50">
+                        <h4 class="text-4xl font-[950] uppercase mb-12 border-b-8 border-black pb-6 italic">Veri Kayıt Portu</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                            <input type="text" id="in-n" placeholder="ÜRÜN/FİRMA ADI">
+                            <input type="number" id="in-b" placeholder="ALIŞ FİYATI">
+                            <input type="number" id="in-s" placeholder="SATIŞ FİYATI">
+                            <input type="number" id="in-q" placeholder="STOK ADEDİ">
                         </div>
-                        <button onclick="add()" class="btn-primary w-full mt-6 py-4">Veriyi Kaydet</button>
+                        <button onclick="add()" class="w-full mt-10 bg-black text-white p-8 text-3xl font-[950] italic">SİSTEME MÜHÜRLE</button>
                     </div>
-                    <div class="bg-white border border-gray-100 rounded-[32px] overflow-hidden">
-                        <table class="data-table">
+                    <div class="elite-card !p-0 overflow-hidden">
+                        <table class="data-table w-full text-left">
                             <thead>
-                                <tr><th>Ürün Bilgisi</th><th>Miktar</th><th>Karlılık</th><th class="text-right">İşlem</th></tr>
+                                <tr><th>UUID</th><th>VARLIK DETAYI</th><th>STOK</th><th>VERİMLİLİK</th><th class="text-right">AKSİYON</th></tr>
                             </thead>
-                            <tbody id="list"></tbody>
+                            <tbody id="list" class="bg-white"></tbody>
                         </table>
                     </div>
                 </section>
 
-                <section id="s-fin" class="hidden-section grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <div class="stat-card text-center flex flex-col justify-center py-24">
-                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">Ortalama Kar Marjı</h4>
-                        <div id="v-margin" class="text-[120px] font-black leading-none tracking-tighter">%0</div>
+                <section id="s-finans" class="hidden-section grid grid-cols-1 md:grid-cols-2 gap-16">
+                    <div class="elite-card text-center flex flex-col justify-center py-32 bg-white">
+                        <h4 class="text-[11px] font-black opacity-20 tracking-[15px] mb-12 uppercase">Ortalama Karlılık Oranı</h4>
+                        <div id="v-margin" class="text-[180px] font-[950] leading-none text-blue-700 tracking-tighter mono">%0</div>
                     </div>
-                    <div class="bg-black text-white rounded-[40px] p-16 flex flex-col justify-between">
+                    <div class="elite-card bg-black text-white flex flex-col justify-between p-20">
                         <div>
-                            <h4 class="text-xs font-bold uppercase tracking-widest opacity-40 mb-10">Finans Danışmanı</h4>
-                            <p id="v-advice" class="text-3xl font-light leading-relaxed">Sistemde analiz için yeterli veri bulunmuyor.</p>
+                            <h4 class="text-[11px] font-black uppercase tracking-[15px] opacity-40 italic underline mb-10">AI_PERFORMANCE_OFFICER</h4>
+                            <p id="v-advice" class="text-5xl font-[950] italic leading-tight">Yeterli veri girişi bekleniyor...</p>
                         </div>
-                        <div class="pt-10 border-t border-white/10 text-[10px] font-bold opacity-30">SSL SECURED // ENTERPRISE v2026</div>
+                        <div class="pt-16 border-t border-white/10 text-[10px] font-black text-blue-500 tracking-[10px] uppercase">Elite Core v.2026 // Kayseri Node</div>
                     </div>
                 </section>
 
-                <section id="s-bill" class="hidden-section max-w-4xl mx-auto w-full bg-white border border-gray-200 p-16 rounded-[40px] shadow-sm">
-                    <div class="flex justify-between border-b pb-12 mb-12">
+                <section id="s-fatura" class="hidden-section max-w-5xl mx-auto w-full bg-white border-[15px] border-black p-24 shadow-[50px_50px_0px_0px_#000]">
+                    <div class="flex justify-between border-b-[12px] border-black pb-16 mb-16">
                         <div>
-                            <h3 class="text-3xl font-black italic uppercase">FATURA</h3>
-                            <p class="text-[10px] font-bold text-gray-400 mt-2">DOKÜMAN: #TH-2026</p>
+                            <h3 class="text-9xl font-[950] italic uppercase leading-none tracking-tighter underline decoration-[20px]">FATURA</h3>
+                            <p class="mono text-xs font-bold mt-6 opacity-40 tracking-[10px]">BELGE NO: #TH-2026-TITAN</p>
                         </div>
-                        <div class="text-right">
-                            <h4 class="font-black text-lg">TedarikHub Enterprise</h4>
-                            <p class="text-xs text-gray-400 uppercase">Kayseri HQ</p>
+                        <div class="text-right uppercase font-[950]">
+                            <h4 class="text-4xl italic">TEDARİKHUB</h4>
+                            <p class="text-[10px] opacity-50 tracking-[5px] mt-4">Global Lojistik Genel Merkezi // Kayseri</p>
                         </div>
                     </div>
-                    <div id="b-list" class="space-y-6 mb-16 text-sm">
-                        <p class="text-center text-gray-300 py-10">Ürün eklemesi yapın.</p>
-                    </div>
-                    <div class="border-t pt-12 flex justify-between items-center">
-                        <div><p class="text-xs font-bold text-gray-400 uppercase">Toplam Tutar</p><h3 id="b-total" class="text-5xl font-black">₺0</h3></div>
-                        <button onclick="window.print()" class="bg-black text-white px-10 py-4 no-print rounded-full">Faturayı Yazdır</button>
+                    <div id="b-list" class="space-y-10 mb-20 text-3xl font-[950] italic uppercase">
+                        </div>
+                    <div class="border-t-[12px] border-black pt-16 flex justify-between items-end">
+                        <div>
+                            <p class="text-xs font-black opacity-30 uppercase tracking-[10px]">Toplam Ödenecek Tutar</p>
+                            <h3 id="b-total" class="text-9xl font-[950] leading-none mono tracking-tighter">₺0</h3>
+                        </div>
+                        <button onclick="window.print()" class="p-10 bg-black text-white px-20 text-2xl no-print italic">BASKIYI BAŞLAT</button>
                     </div>
                 </section>
 
-                <section id="s-core" class="hidden-section max-w-2xl mx-auto text-center space-y-10 py-10">
-                    <div class="w-20 h-20 bg-gray-50 rounded-3xl flex items-center justify-center mx-auto mb-10 border border-gray-100">
-                        <i class="fa-solid fa-database text-2xl text-black"></i>
+                <section id="s-ayar" class="hidden-section max-w-4xl mx-auto text-center space-y-16 py-24">
+                    <div class="elite-card border-red-600">
+                        <i class="fa-solid fa-atom text-[150px] mb-12 animate-spin" style="animation-duration: 10s;"></i>
+                        <h3 class="text-6xl font-[950] uppercase italic mb-12 tracking-tighter">Sistem Yapılandırması</h3>
+                        <div class="grid grid-cols-2 gap-10">
+                            <button onclick="bak()" class="p-8 bg-black text-white text-xl">YEDEKLE (.JSON)</button>
+                            <button onclick="document.getElementById('f-in').click()" class="p-8 text-xl font-black">GERİ YÜKLE</button>
+                            <input type="file" id="f-in" class="hidden" onchange="res(event)">
+                        </div>
+                        <button onclick="nuke()" class="w-full mt-16 p-10 bg-red-600 text-white text-3xl font-[950] italic uppercase">Tüm Sistemi Sıfırla</button>
                     </div>
-                    <h3 class="text-2xl font-black">Veri Yönetimi</h3>
-                    <p class="text-gray-400 text-sm">Sistem yedeğini indirebilir veya mevcut bir yedeği sisteme yükleyebilirsiniz.</p>
-                    <div class="grid grid-cols-2 gap-4">
-                        <button onclick="bak()" class="p-4 border border-gray-200 hover:bg-black hover:text-white transition">Yedek İndir</button>
-                        <button onclick="document.getElementById('f-in').click()" class="p-4 border border-gray-200 hover:bg-black hover:text-white transition">Yedek Yükle</button>
-                        <input type="file" id="f-in" class="hidden" onchange="res(event)">
-                    </div>
-                    <button onclick="nuke()" class="w-full mt-10 p-4 text-red-600 bg-red-50 hover:bg-red-600 hover:text-white transition">Sistem Verilerini Sıfırla</button>
                 </section>
             </div>
         </main>
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('th_black_db')) || [];
-        const auth = JSON.parse(localStorage.getItem('th_black_auth')) || null;
+        // --- ELITE PERFORMANCE ENGINE v2.026 ---
+        let db = JSON.parse(localStorage.getItem('th_elite_db')) || [];
+        const auth = JSON.parse(localStorage.getItem('th_elite_auth')) || null;
 
         window.onload = () => {
-            if(sessionStorage.getItem('th_black_session') === '1') unlock();
+            if(sessionStorage.getItem('th_e_session') === '1') unlock();
             up();
         };
 
+        // GİRİŞ KONTROLÜ
         document.getElementById('auth-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const u = document.getElementById('op-id').value;
             const k = document.getElementById('op-key').value;
             if(!auth) {
-                localStorage.setItem('th_black_auth', JSON.stringify({u, k}));
-                alert("Yönetici hesabı oluşturuldu."); location.reload();
+                localStorage.setItem('th_elite_auth', JSON.stringify({u, k}));
+                alert("SİSTEM ÇEKİRDEĞİ OLUŞTURULDU. YENİDEN GİRİŞ YAPIN."); location.reload();
             } else if(u === auth.u && k === auth.k) {
-                sessionStorage.setItem('th_black_session', '1');
+                sessionStorage.setItem('th_e_session', '1');
                 unlock();
             } else { document.getElementById('auth-error').classList.remove('hidden'); }
         });
@@ -206,31 +211,40 @@ HTML
             document.getElementById('app').classList.remove('hidden-section');
         }
 
+        // VERİ YÖNETİMİ
         function add() {
             const n = document.getElementById('in-n').value, b = parseFloat(document.getElementById('in-b').value), s = parseFloat(document.getElementById('in-s').value), q = parseInt(document.getElementById('in-q').value);
             if(!n || isNaN(b) || isNaN(s) || isNaN(q)) return;
-            db.push({id: Math.floor(Math.random()*9999), n, b, s, q, m: (((s-b)/b)*100).toFixed(1)});
+            db.push({id: 'TR-'+Math.floor(100000+Math.random()*899999), n, b, s, q, m: (((s-b)/b)*100).toFixed(1)});
             save(); up();
             ['in-n','in-b','in-s','in-q'].forEach(f => document.getElementById(f).value = '');
         }
 
         function del(id) { db = db.filter(x => x.id !== id); save(); up(); }
-        function save() { localStorage.setItem('th_black_db', JSON.stringify(db)); }
+        function save() { localStorage.setItem('th_elite_db', JSON.stringify(db)); }
 
         function up() {
             const val = db.reduce((a, x) => a + (x.s * x.q), 0);
+            const profit = db.reduce((a, x) => a + ((x.s - x.b) * x.q), 0);
             document.getElementById('stat-c').innerText = db.length;
             document.getElementById('stat-v').innerText = '₺' + val.toLocaleString();
+            document.getElementById('stat-p').innerText = '₺' + profit.toLocaleString();
+            
+            const load = Math.min(db.length * 4, 100);
+            document.getElementById('load-bar').style.width = load + '%';
+            document.getElementById('load-val').innerText = load + '%';
+            
             render(); chart(); finance(); invoice(val);
         }
 
         function render() {
             document.getElementById('list').innerHTML = db.map(x => `
-                <tr>
-                    <td class="font-semibold">${x.n}</td>
-                    <td class="text-gray-500">${x.q} Adet</td>
-                    <td><span class="bg-gray-100 text-black px-3 py-1 rounded-full text-[10px] font-bold uppercase">%${x.m} Kar</span></td>
-                    <td class="text-right"><button onclick="del(${x.id})" class="text-gray-300 hover:text-red-500 transition"><i class="fa-solid fa-trash-can"></i></button></td>
+                <tr class="hover:bg-gray-50 transition border-b-[6px] border-black">
+                    <td class="p-8 text-xs font-black opacity-30 italic mono">${x.id}</td>
+                    <td class="p-8 text-4xl font-[950] tracking-tighter uppercase italic">${x.n}</td>
+                    <td class="p-8 text-5xl font-[950] mono">${x.q} <span class="text-xs opacity-30">ADT</span></td>
+                    <td class="p-8 text-center"><span class="bg-black text-white p-5 px-8 text-xs font-black italic uppercase">%${x.m} KAR</span></td>
+                    <td class="p-8 text-right"><button onclick="del('${x.id}')" class="p-3 px-8 text-red-600 border-none bg-red-50 hover:bg-black hover:text-white transition font-black">PURGE</button></td>
                 </tr>
             `).join('');
         }
@@ -238,47 +252,64 @@ HTML
         function invoice(total) {
             document.getElementById('b-total').innerText = '₺' + total.toLocaleString();
             const inv = document.getElementById('b-list');
-            if(db.length === 0) { inv.innerHTML = '<p class="text-center text-gray-300 py-10">Ürün eklemesi yapın.</p>'; return; }
-            inv.innerHTML = db.map(x => `<div class="flex justify-between py-2 border-b border-gray-50"><span>${x.n} (${x.q}x)</span><span class="font-semibold">₺${(x.s*x.q).toLocaleString()}</span></div>`).join('');
+            if(db.length === 0) { inv.innerHTML = '<p class="text-center opacity-10 py-20 tracking-[15px]">VERİ AKIŞI YOK</p>'; return; }
+            inv.innerHTML = db.map(x => `
+                <div class="flex justify-between border-b-4 border-black pb-6 uppercase italic">
+                    <span>${x.n} [MİKTAR: ${x.q}]</span>
+                    <span class="mono text-4xl">₺${(x.s*x.q).toLocaleString()}</span>
+                </div>
+            `).join('');
         }
 
         function finance() {
             if(db.length === 0) return;
             const avg = (db.reduce((a, x) => a + parseFloat(x.m), 0) / db.length).toFixed(1);
             document.getElementById('v-margin').innerText = '%' + avg;
-            document.getElementById('v-advice').innerText = avg > 30 ? "Kar oranlarınız piyasa ortalamasının üzerinde. Büyüme stratejisine odaklanın." : "Marjlar düşük seyrediyor. Tedarik maliyetlerini optimize etmeniz gerekebilir.";
+            document.getElementById('v-advice').innerText = avg > 40 ? "KARLILIK OPTİMUM SEVİYEDE. PAZARI DOMİNE ETMEK İÇİN STOK ARTIRIN." : "KAR MARJLARI RİSKLİ. TEDARİK MALİYETLERİNİ İNCELEYİN.";
         }
 
         function search() {
             const k = document.getElementById('search').value.toLowerCase();
             const filt = db.filter(x => x.n.toLowerCase().includes(k));
-            document.getElementById('list').innerHTML = filt.map(x => `...`).join(''); // Same render
+            renderTable(filt);
+        }
+
+        function renderTable(data) {
+            document.getElementById('list').innerHTML = data.map(x => `
+                <tr class="hover:bg-gray-50 transition border-b-[6px] border-black">
+                    <td class="p-8 text-xs font-black opacity-30 italic mono">${x.id}</td>
+                    <td class="p-8 text-4xl font-[950] tracking-tighter uppercase italic">${x.n}</td>
+                    <td class="p-8 text-5xl font-[950] mono">${x.q} <span class="text-xs opacity-30">ADT</span></td>
+                    <td class="p-8 text-center"><span class="bg-black text-white p-5 px-8 text-xs font-black italic uppercase">%${x.m} KAR</span></td>
+                    <td class="p-8 text-right"><button onclick="del('${x.id}')" class="p-3 px-8 text-red-600 border-none bg-red-50 hover:bg-black hover:text-white transition font-black">PURGE</button></td>
+                </tr>
+            `).join('');
         }
 
         function exportX() {
             const ws = XLSX.utils.json_to_sheet(db);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Data");
-            XLSX.writeFile(wb, "TedarikHub_Rapor.xlsx");
+            XLSX.utils.book_append_sheet(wb, ws, "Elite_Data");
+            XLSX.writeFile(wb, "TedarikHub_Elite_Export.xlsx");
         }
 
         function bak() {
             const ds = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
-            const dl = document.createElement('a'); dl.setAttribute("href", ds); dl.setAttribute("download", "yedek.json"); dl.click();
+            const dl = document.createElement('a'); dl.setAttribute("href", ds); dl.setAttribute("download", "th_elite_vault.json"); dl.click();
         }
 
         function res(e) {
             const r = new FileReader(); r.onload = (ev) => { db = JSON.parse(ev.target.result); save(); up(); }; r.readAsText(e.target.files[0]);
         }
 
-        function nuke() { if(confirm("Tüm veriler silinecek?")) { localStorage.clear(); location.reload(); } }
+        function nuke() { if(confirm("TÜM VERİLERİ SİLMEK İSTEDİĞİNİZE EMİN MİSİNİZ?")) { localStorage.clear(); location.reload(); } }
 
         function tab(id) {
             document.querySelectorAll('main section').forEach(s => s.classList.add('hidden-section'));
             document.getElementById('s-' + id).classList.remove('hidden-section');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
             document.getElementById('t-' + id).classList.add('active-nav');
-            document.getElementById('view-title').innerText = document.getElementById('t-' + id).innerText;
+            document.getElementById('view-title').innerText = id === 'dash' ? 'PANEL' : (id === 'stok' ? 'ENVANTER' : (id === 'finans' ? 'FİNANS' : (id === 'fatura' ? 'FATURA' : 'AYARLAR')));
         }
 
         let myC;
@@ -289,9 +320,9 @@ HTML
                 type: 'line',
                 data: {
                     labels: db.map(x => x.n),
-                    datasets: [{ label: 'Satış', data: db.map(x => x.s * x.q), borderColor: '#000', borderWidth: 2, fill: false, tension: 0.3 }]
+                    datasets: [{ label: 'Varlık Hacmi', data: db.map(x => x.s * x.q), borderColor: '#000', borderWidth: 20, fill: false, tension: 0, pointRadius: 15, pointBackgroundColor: '#000' }]
                 },
-                options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
+                options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { color: 'rgba(0,0,0,0.1)', lineWidth: 10 } } } }
             });
         }
     </script>
