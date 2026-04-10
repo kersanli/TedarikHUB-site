@@ -1,0 +1,74 @@
+import React from 'react';
+
+export default function HomePage() {
+  return (
+    <div style={{ textAlign: 'center', padding: '80px 20px' }}>
+      <h2 style={{ color: '#1A2B49', fontSize: '42px', fontWeight: '800' }}>
+        Güvenilir Toptancılar, <span style={{ color: '#FF6F61' }}>Tek Tıkla</span> Kapınızda.
+      </h2>
+      <p style={{ color: '#64748B', fontSize: '18px', marginBottom: '40px' }}>Türkiye'nin en büyük doğrulanmış tedarik ağı.</p>
+      
+      <div style={{ maxWidth: '600px', margin: '0 auto', display: 'flex', boxShadow: '0 10px 25px rgba(0,0,0,0.1)', borderRadius: '50px', overflow: 'hidden' }}>
+        <input type="text" placeholder="Ürün veya toptancı arayın..." style={{ flexGrow: 1, padding: '20px', border: 'none', outline: 'none', fontSize: '16px' }} />
+        <button style={{ backgroundColor: '#1A2B49', color: 'white', border: 'none', padding: '0 30px', fontWeight: 'bold', cursor: 'pointer' }}>Ara</button>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginTop: '60px', maxWidth: '900px', margin: '60px auto 0' }}>
+        {['Tekstil', 'Gıda', 'Elektronik', 'Kozmetik'].map(cat => (
+          <div key={cat} style={{ bg: 'white', padding: '20px', borderRadius: '15px', border: '1px solid #E2E8F0', cursor: 'pointer', transition: '0.3s' }}>
+            <div style={{ fontSize: '30px' }}>📦</div>
+            <h4 style={{ color: '#1A2B49' }}>{cat}</h4>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+import React from 'react';
+
+const veriler = [
+  { id: 1, ad: 'Toptan Pamuklu Kumaş', fiyat: '120 TL', sirket: 'Anadolu Tekstil', onayli: true },
+  { id: 2, ad: 'Endüstriyel Mutfak Seti', fiyat: '4500 TL', sirket: 'MutfakDepo', onayli: true }
+];
+
+export default function Products() {
+  return (
+    <div style={{ padding: '40px' }}>
+      <h3 style={{ color: '#1A2B49', marginBottom: '20px' }}>Arama Sonuçları</h3>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+        {veriler.map(p => (
+          <div key={p.id} style={{ backgroundColor: 'white', padding: '20px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <h4 style={{ margin: 0 }}>{p.ad}</h4>
+              {p.onayli && <span style={{ backgroundColor: '#DBEAFE', color: '#1E40AF', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold' }}>GÜVENLİ SATICI</span>}
+            </div>
+            <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#1A2B49' }}>{p.fiyat}</p>
+            <p style={{ color: '#64748B' }}>{p.sirket}</p>
+            <button style={{ width: '100%', padding: '10px', backgroundColor: '#1A2B49', color: 'white', border: 'none', borderRadius: '6px', fontWeight: 'bold' }}>Tedarikçiye Ulaş</button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+import React from 'react';
+
+export default function RootLayout({ children }) {
+  return (
+    <div style={{ fontFamily: 'sans-serif', margin: 0, backgroundColor: '#F8FAFC' }}>
+      <header style={{ 
+        display: 'flex', justifyContent: 'space-between', padding: '20px 40px', 
+        backgroundColor: '#FFFFFF', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' 
+      }}>
+        <h1 style={{ color: '#1A2B49', margin: 0, fontSize: '24px', fontWeight: 'bold' }}>TedarikHub</h1>
+        <nav>
+          <button style={{ 
+            backgroundColor: '#FF6F61', color: 'white', border: 'none', 
+            padding: '10px 20px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' 
+          }}>Giriş Yap</button>
+        </nav>
+      </header>
+      <main>{children}</main>
+    </div>
+  );
+}
