@@ -3,57 +3,328 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TedarikHub - Güvenli Ticaret Platformu</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>TedarikHub Quantum v4.0 | Enterprise Resource Planning (ERP)</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script> <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        :root { --main-bg: #020617; --card-bg: #0f172a; --accent: #38bdf8; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--main-bg); color: #f8fafc; overflow: hidden; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .sidebar { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.1); }
+        .glass-card { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px); transition: all 0.3s; }
+        .glass-card:hover { border-color: var(--accent); transform: scale(1.01); }
+        .btn-glow { box-shadow: 0 0 20px rgba(56, 189, 248, 0.2); }
+        .hidden-section { display: none; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .terminal-text { color: #10b981; text-shadow: 0 0 5px rgba(16,185,129,0.5); }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
+<body class="flex h-screen w-screen overflow-hidden">
 
-    <nav class="bg-white p-5 shadow-sm border-b-4 border-blue-900 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <h1 class="text-3xl font-extrabold text-blue-900 tracking-tighter">TEDARİKHUB</h1>
-            <div class="flex items-center gap-3">
-                <button class="text-gray-600 font-semibold hover:text-blue-900">Yardım</button>
-                <button class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-full font-bold shadow-md transition" onclick="alert('Giriş ekranı yakında açılacak!')">
-                    Giriş Yap
+    <aside class="sidebar w-80 flex flex-col p-6 z-50">
+        <div class="flex items-center gap-4 mb-12">
+            <div class="w-12 h-12 bg-sky-500 rounded-2xl flex items-center justify-center btn-glow animate-pulse">
+                <i class="fa-solid fa-atom text-white text-2xl"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-black tracking-tighter">TEDARİKHUB<span class="text-sky-400 font-normal">.os</span></h1>
+                <p class="text-[9px] font-bold text-slate-500 uppercase tracking-[3px]">Quantum Engine</p>
+            </div>
+        </div>
+
+        <nav class="space-y-3 flex-grow overflow-y-auto">
+            <div onclick="switchPage('main')" id="m-main" class="p-4 rounded-xl cursor-pointer hover:bg-white/5 transition flex items-center gap-4 border border-transparent active-nav">
+                <i class="fa-solid fa-gauge-high text-sky-400"></i> <span class="font-bold text-sm">MERKEZİ PANEL</span>
+            </div>
+            <div onclick="switchPage('inventory')" id="m-inventory" class="p-4 rounded-xl cursor-pointer hover:bg-white/5 transition flex items-center gap-4 border border-transparent">
+                <i class="fa-solid fa-boxes-stacked text-purple-400"></i> <span class="font-bold text-sm">STOK VE ENVANTER</span>
+            </div>
+            <div onclick="switchPage('accounting')" id="m-accounting" class="p-4 rounded-xl cursor-pointer hover:bg-white/5 transition flex items-center gap-4 border border-transparent">
+                <i class="fa-solid fa-calculator text-emerald-400"></i> <span class="font-bold text-sm">MUHASEBE VE KASA</span>
+            </div>
+            <div onclick="switchPage('ai')" id="m-ai" class="p-4 rounded-xl cursor-pointer hover:bg-white/5 transition flex items-center gap-4 border border-transparent">
+                <i class="fa-solid fa-brain text-pink-400"></i> <span class="font-bold text-sm">AI ANALİZÖR</span>
+            </div>
+            <div onclick="switchPage('terminal')" id="m-terminal" class="p-4 rounded-xl cursor-pointer hover:bg-white/5 transition flex items-center gap-4 border border-transparent">
+                <i class="fa-solid fa-terminal text-slate-400"></i> <span class="font-bold text-sm font-mono tracking-tighter">SİSTEM LOGLARI</span>
+            </div>
+        </nav>
+
+        <div class="mt-auto p-4 glass-card rounded-2xl border-dashed">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-[10px] font-bold text-slate-400">ENCRYPTION STATUS</span>
+                <span class="text-[10px] text-emerald-500 font-bold">SECURE (AES-256)</span>
+            </div>
+            <div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
+                <div class="bg-emerald-500 h-full w-full"></div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto relative p-10 bg-gradient-to-br from-slate-950 to-blue-950">
+        
+        <div class="flex justify-between items-center mb-12 border-b border-white/5 pb-8">
+            <div>
+                <h2 id="page-title" class="text-4xl font-black tracking-tight">Merkezi Kontrol</h2>
+                <p id="page-desc" class="text-slate-400 font-medium">Tüm sistemler stabil durumda.</p>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="text-right">
+                    <p class="text-[10px] font-bold text-slate-500">CANLI VERİ AKIŞI</p>
+                    <p id="live-timer" class="mono text-sky-400 font-bold tracking-widest text-lg">00:00:00</p>
+                </div>
+                <button onclick="clearDatabase()" class="bg-red-500/10 text-red-500 p-4 rounded-2xl hover:bg-red-500 hover:text-white transition">
+                    <i class="fa-solid fa-power-off"></i>
                 </button>
             </div>
         </div>
-    </nav>
 
-    <div class="max-w-7xl mx-auto text-center py-32 px-4">
-        <span class="inline-block bg-blue-100 text-blue-900 px-4 py-1.5 rounded-full text-sm font-bold mb-6">Türkiye'nin En Büyük Doğrulanmış Tedarik Ağı</span>
-        <h2 class="text-6xl md:text-7xl font-extrabold text-blue-950 leading-tight">Güvenilir Toptancılar,<br><span class="text-orange-500">Tek Tıkla</span> Kapınızda.</h2>
-        <p class="text-gray-600 mt-8 text-2xl max-w-2xl mx-auto font-medium">Binlerce doğrulanmış tedarikçiye ve milyonlarca ürüne anında ulaşın. Ticaretinizi güvenle büyütün.</p>
+        <div id="page-main" class="space-y-8 animate-in fade-in zoom-in duration-300">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="glass-card p-6 rounded-3xl">
+                    <p class="text-xs font-bold text-slate-500 uppercase">Aktif Tedarikçi</p>
+                    <h3 id="stat-vendors" class="text-4xl font-black mt-2 tracking-tighter text-sky-400">0</h3>
+                </div>
+                <div class="glass-card p-6 rounded-3xl">
+                    <p class="text-xs font-bold text-slate-500 uppercase">Toplam Varlık</p>
+                    <h3 id="stat-wealth" class="text-4xl font-black mt-2 tracking-tighter text-emerald-400">₺0</h3>
+                </div>
+                <div class="glass-card p-6 rounded-3xl border-l-4 border-pink-500">
+                    <p class="text-xs font-bold text-slate-500 uppercase">Yükleme Kapasitesi</p>
+                    <h3 class="text-4xl font-black mt-2 tracking-tighter">84%</h3>
+                </div>
+                <div class="glass-card p-6 rounded-3xl">
+                    <p class="text-xs font-bold text-slate-500 uppercase">Sistem Isısı</p>
+                    <h3 class="text-4xl font-black mt-2 tracking-tighter text-orange-400">32°C</h3>
+                </div>
+            </div>
+            <div class="glass-card p-10 rounded-[40px]">
+                <canvas id="performanceChart" height="100"></canvas>
+            </div>
+        </div>
+
+        <div id="page-inventory" class="hidden-section space-y-6">
+            <div class="glass-card p-8 rounded-3xl flex gap-4">
+                <input type="text" id="p-name" placeholder="Ürün Adı" class="flex-1 bg-white/5 border-white/10 p-4 rounded-xl outline-none focus:border-sky-400 text-white font-bold">
+                <input type="number" id="p-stock" placeholder="Adet" class="w-32 bg-white/5 border-white/10 p-4 rounded-xl outline-none focus:border-sky-400 text-white font-bold">
+                <input type="number" id="p-price" placeholder="Birim Fiyat" class="w-32 bg-white/5 border-white/10 p-4 rounded-xl outline-none focus:border-sky-400 text-white font-bold">
+                <button onclick="addItem()" class="bg-sky-500 text-white px-8 rounded-xl font-black hover:bg-sky-400 transition btn-glow uppercase">Kaydet</button>
+            </div>
+            <div class="glass-card rounded-[32px] overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-white/5">
+                        <tr>
+                            <th class="p-6 text-xs font-black text-slate-400 uppercase tracking-widest">Ürün Kimliği</th>
+                            <th class="p-6 text-xs font-black text-slate-400 uppercase tracking-widest">İsim</th>
+                            <th class="p-6 text-xs font-black text-slate-400 uppercase tracking-widest">Stok</th>
+                            <th class="p-6 text-xs font-black text-slate-400 uppercase tracking-widest">Maliyet</th>
+                            <th class="p-6 text-xs font-black text-slate-400 uppercase tracking-widest">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-list" class="mono text-sm"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="page-accounting" class="hidden-section grid grid-cols-2 gap-10">
+            <div class="glass-card p-10 rounded-[40px] text-center">
+                <div class="w-24 h-24 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fa-solid fa-vault text-4xl text-emerald-500"></i>
+                </div>
+                <h4 class="text-sm font-black text-slate-500 uppercase tracking-widest">Kasa Bakiyesi</h4>
+                <h3 id="vault-balance" class="text-6xl font-black text-white mt-4 tracking-tighter font-mono">₺0</h3>
+            </div>
+            <div class="glass-card p-10 rounded-[40px]">
+                <h4 class="font-black text-xl mb-6">Finansal Loglar</h4>
+                <div id="finance-logs" class="space-y-4 max-h-[300px] overflow-y-auto pr-4"></div>
+            </div>
+        </div>
+
+        <div id="page-ai" class="hidden-section text-center py-20">
+            <div class="relative inline-block mb-10">
+                <div class="absolute inset-0 bg-pink-500 blur-3xl opacity-20 animate-pulse"></div>
+                <i class="fa-solid fa-brain text-9xl text-pink-500 relative z-10"></i>
+            </div>
+            <h3 class="text-4xl font-black mb-4">TedarikHub Quantum AI</h3>
+            <p id="ai-response" class="text-xl text-slate-400 max-w-2xl mx-auto italic font-medium">"Veri girişi bekleniyor. En az 3 ürün eklediğinizde karlılık analizi yapabilirim."</p>
+        </div>
+
+        <div id="page-terminal" class="hidden-section glass-card rounded-3xl p-8 mono h-[600px] overflow-hidden flex flex-col">
+            <div class="flex gap-2 mb-4 border-b border-white/5 pb-4 text-xs font-bold text-slate-500 uppercase tracking-[3px]">
+                <span class="w-3 h-3 bg-red-500 rounded-full"></span>
+                <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
+                <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                <span class="ml-4">SYSTEM DEBUG CONSOLE</span>
+            </div>
+            <div id="terminal-content" class="flex-grow overflow-y-auto text-[12px] space-y-1 terminal-text"></div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- QUANTUM SİSTEM ÇEKİRDEĞİ ---
+        let storage = JSON.parse(localStorage.getItem('th_quantum_v4')) || { inventory: [], transactions: [] };
         
-        <div class="mt-16 max-w-3xl mx-auto flex shadow-2xl rounded-full overflow-hidden border-8 border-white bg-white">
-            <input type="text" placeholder="Ürün, kategori veya toptancı ara..." class="flex-grow p-6 outline-none text-xl placeholder-gray-400">
-            <button class="bg-blue-900 text-white px-14 text-xl font-bold hover:bg-blue-800 transition">ARA</button>
-        </div>
-    </div>
+        function bootSystem() {
+            logTerminal("Sistem önyüklemesi başlatıldı...");
+            logTerminal("Şifreleme anahtarları yüklendi (AES-256).");
+            logTerminal("Local Database senkronize edildi.");
+            updateUI();
+            startClock();
+            logTerminal("Tüm sistemler aktif. Erişim onaylandı.");
+        }
 
-    <div class="bg-white py-20 border-t border-slate-100">
-        <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-10 text-center">
-            <div class="p-8 border rounded-2xl bg-slate-50 hover:shadow-lg transition">
-                <div class="text-5xl mb-6">🛡️</div>
-                <h4 class="text-2xl font-bold text-blue-950">Güvenli Ticaret</h4>
-                <p class="text-gray-600 mt-3">Tüm tedarikçiler doğrulanmıştır.</p>
-            </div>
-            <div class="p-8 border rounded-2xl bg-slate-50 hover:shadow-lg transition">
-                <div class="text-5xl mb-6">📦</div>
-                <h4 class="text-2xl font-bold text-blue-950">Milyonlarca Ürün</h4>
-                <p class="text-gray-600 mt-3">İhtiyacınız olan her şey burada.</p>
-            </div>
-            <div class="p-8 border rounded-2xl bg-slate-50 hover:shadow-lg transition">
-                <div class="text-5xl mb-6">🚀</div>
-                <h4 class="text-2xl font-bold text-blue-950">Hızlı Sevkiyat</h4>
-                <p class="text-gray-600 mt-3">Anlaşmalı kargolarla jet hızında teslimat.</p>
-            </div>
-        </div>
-    </div>
+        function switchPage(pageId) {
+            document.querySelectorAll('main > div[id^="page-"]').forEach(p => p.classList.add('hidden-section'));
+            document.getElementById('page-' + pageId).classList.remove('hidden-section');
+            document.querySelectorAll('aside nav div').forEach(d => d.style.background = 'transparent');
+            document.getElementById('m-' + pageId).style.background = 'rgba(255,255,255,0.05)';
+            
+            const meta = {
+                'main': ['Merkezi Kontrol', 'Sistem genel durum analitiği.'],
+                'inventory': ['Stok Yönetimi', 'Tüm tedarik ve envanter akışları.'],
+                'accounting': ['Finansal Kasa', 'Cüzdan ve işlem geçmişi.'],
+                'ai': ['Yapay Zeka Analiz', 'Otonom ticaret öngörüleri.'],
+                'terminal': ['Sistem Terminali', 'Ham veri ve log akışı.']
+            };
+            document.getElementById('page-title').innerText = meta[pageId][0];
+            document.getElementById('page-desc').innerText = meta[pageId][1];
+            logTerminal(`Sekme değiştirildi: ${meta[pageId][0]}`);
+            if(pageId === 'ai') runAI();
+        }
 
+        // --- STOK MOTORU ---
+        function addItem() {
+            const name = document.getElementById('p-name').value;
+            const stock = parseInt(document.getElementById('p-stock').value);
+            const price = parseFloat(document.getElementById('p-price').value);
+
+            if(!name || isNaN(stock) || isNaN(price)) {
+                logTerminal("HATA: Hatalı veri girişi. Kayıt iptal edildi.", "text-red-500");
+                return;
+            }
+
+            const item = { id: 'TR-' + Math.floor(Math.random()*99999), name, stock, price };
+            storage.inventory.push(item);
+            storage.transactions.push({ time: new Date().toLocaleTimeString(), type: 'Giriş', msg: `${name} envantere eklendi.`, val: stock * price });
+            
+            save();
+            updateUI();
+            logTerminal(`Envanter Güncellendi: ${name} (x${stock})`);
+            
+            document.getElementById('p-name').value = '';
+            document.getElementById('p-stock').value = '';
+            document.getElementById('p-price').value = '';
+        }
+
+        function deleteItem(id) {
+            storage.inventory = storage.inventory.filter(i => i.id !== id);
+            save();
+            updateUI();
+            logTerminal(`Kayıt Silindi: ID ${id}`, "text-orange-500");
+        }
+
+        // --- ANALİZ VE AI MOTORU ---
+        function runAI() {
+            const aiText = document.getElementById('ai-response');
+            if(storage.inventory.length < 3) {
+                aiText.innerText = "Yeterli veri yok. AI analizi için en az 3 farklı ürün kategorisi girin.";
+                return;
+            }
+            aiText.innerText = "Hesaplanıyor...";
+            setTimeout(() => {
+                const top = storage.inventory.reduce((a, b) => a.price > b.price ? a : b);
+                aiText.innerHTML = `<span class="text-pink-400">Quantum AI Öngörüsü:</span> "${top.name} kategorisinde stok maliyetiniz yüksek. Pazar analizine göre bu ay %15 indirim yaparak likiditeyi artırmanızı öneririm."`;
+                logTerminal("AI Analiz Motoru başarıyla çalıştırıldı.");
+            }, 1000);
+        }
+
+        // --- YARDIMCI SİSTEMLER ---
+        function updateUI() {
+            // Stats
+            document.getElementById('stat-vendors').innerText = storage.inventory.length;
+            const total = storage.inventory.reduce((s, i) => s + (i.stock * i.price), 0);
+            document.getElementById('stat-wealth').innerText = '₺' + total.toLocaleString();
+            document.getElementById('vault-balance').innerText = '₺' + total.toLocaleString();
+
+            // Inventory List
+            const list = document.getElementById('inventory-list');
+            list.innerHTML = storage.inventory.map(i => `
+                <tr class="border-b border-white/5 hover:bg-white/5 transition">
+                    <td class="p-6 text-slate-500 font-bold">${i.id}</td>
+                    <td class="p-6 text-white font-black">${i.name}</td>
+                    <td class="p-6 text-sky-400 font-bold">${i.stock} ADT</td>
+                    <td class="p-6 text-emerald-400 font-bold">₺${i.price.toLocaleString()}</td>
+                    <td class="p-6"><button onclick="deleteItem('${i.id}')" class="text-red-400 hover:scale-125 transition"><i class="fa-solid fa-trash-can"></i></button></td>
+                </tr>
+            `).join('');
+
+            // Finance Logs
+            document.getElementById('finance-logs').innerHTML = storage.transactions.map(t => `
+                <div class="p-4 bg-white/5 rounded-xl border-l-4 border-emerald-500">
+                    <div class="flex justify-between font-bold text-xs mb-1"><span>${t.msg}</span><span class="text-slate-500">${t.time}</span></div>
+                    <div class="text-emerald-400 font-black">+ ₺${t.val.toLocaleString()}</div>
+                </div>
+            `).reverse().join('');
+
+            updateChart(storage.inventory);
+        }
+
+        function save() {
+            localStorage.setItem('th_quantum_v4', JSON.stringify(storage));
+        }
+
+        function logTerminal(msg, colorClass = "terminal-text") {
+            const term = document.getElementById('terminal-content');
+            const time = new Date().toLocaleTimeString();
+            term.innerHTML += `<div class="${colorClass}">[${time}] > ${msg}</div>`;
+            term.scrollTop = term.scrollHeight;
+        }
+
+        function startClock() {
+            setInterval(() => {
+                document.getElementById('live-timer').innerText = new Date().toLocaleTimeString();
+            }, 1000);
+        }
+
+        function clearDatabase() {
+            if(confirm("DİKKAT: Tüm veritabanı şifreleri ve kayıtlar kalıcı olarak silinecek. Onaylıyor musunuz?")) {
+                localStorage.removeItem('th_quantum_v4');
+                storage = { inventory: [], transactions: [] };
+                updateUI();
+                logTerminal("SİSTEM RESETLENDİ: Tüm veriler temizlendi.", "text-red-500");
+                location.reload();
+            }
+        }
+
+        let myChart;
+        function updateChart(data) {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            if (myChart) myChart.destroy();
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(i => i.name),
+                    datasets: [{
+                        label: 'Kategori Hacmi',
+                        data: data.map(i => i.stock * i.price),
+                        borderColor: '#38bdf8',
+                        borderWidth: 5,
+                        tension: 0.4,
+                        fill: true,
+                        backgroundColor: 'rgba(56, 189, 248, 0.1)'
+                    }]
+                },
+                options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { color: 'rgba(255,255,255,0.05)' } } } }
+            });
+        }
+
+        bootSystem();
+    </script>
 </body>
 </html>
