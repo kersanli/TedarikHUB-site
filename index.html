@@ -3,453 +3,320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TedarikHub Quantum v4.0 | Enterprise Resource Planning (ERP)</title>
+    <title>TedarikHub | VAKKO ULTIMA 2026</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script> <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=JetBrains+Mono:wght@100;800&display=swap" rel="stylesheet">
     
     <style>
-        :root { --main-bg: #020617; --card-bg: #0f172a; --accent: #38bdf8; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--main-bg); color: #f8fafc; overflow: hidden; }
+        :root { --black: #000; --white: #fff; --danger: #ff0000; }
+        * { cursor: crosshair !important; border-radius: 0px !important; selection-background: var(--black); selection-color: var(--white); }
+        body { font-family: 'Inter', sans-serif; background: var(--white); color: var(--black); overflow: hidden; }
         .mono { font-family: 'JetBrains Mono', monospace; }
-        .sidebar { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.1); }
-        .glass-card { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px); transition: all 0.3s; }
-        .glass-card:hover { border-color: var(--accent); transform: scale(1.01); }
-        .btn-glow { box-shadow: 0 0 20px rgba(56, 189, 248, 0.2); }
-        .hidden-section { display: none; }
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-        .terminal-text { color: #10b981; text-shadow: 0 0 5px rgba(16,185,129,0.5); }
-    </style>
-</head>
-<body class="flex h-screen w-screen overflow-hidden">
-
-    <aside class="sidebar w-80 flex flex-col p-6 z-50">
-        <div class="flex items-center gap-4 mb-12">
-            <div class="w-12 h-12 bg-sky-500 rounded-2xl flex items-center justify-center btn-glow animate-pulse">
-                <i class="fa-solid fa-atom text-white text-2xl"></i>
-            </div>
-            <div>
-                <h1 class="text-xl font-black tracking-tighter">TEDARİKHUB<span class="text-sky-400 font-normal">.os</span></h1>
-                <p class="text-[9px] font-bold text-slate-500 uppercase tracking-[3px]">Quantum Engine</p>
-            </div>
-        </div>
-
-        <nav class="space-y-3 flex-grow overflow-y-auto">
-            <div onclick="switchPage('main')" id="m-main" class="p-4 rounded-xl cursor-pointer hover:bg-white/5 transition flex items-center gap-4 border border-transparent active-nav">
-                <i class="fa-solid fa-gauge-high text-sky-400"></i> <span class="font-bold text-sm">MERKEZİ PANEL</span>
-            </div>
-            <div onclick="switchPage('inventory')" id="m-inventory" class="p-4 rounded-xl cursor-pointer hover:bg-white/5 transition flex items-center gap-4 border border-transparent">
-                <i class="fa-solid fa-boxes-stacked text-purple-400"></i> <span class="font-bold text-sm">STOK VE ENVANTER</span>
-            </div>
-            <div onclick="switchPage('accounting')" id="m-accounting" class="p-4 rounded-xl cursor-pointer hover:bg-white/5 transition flex items-center gap-4 border border-transparent">
-                <i class="fa-solid fa-calculator text-emerald-400"></i> <span class="font-bold text-sm">MUHASEBE VE KASA</span>
-            </div>
-            <div onclick="switchPage('ai')" id="m-ai" class="p-4 rounded-xl cursor-pointer hover:bg-white/5 transition flex items-center gap-4 border border-transparent">
-                <i class="fa-solid fa-brain text-pink-400"></i> <span class="font-bold text-sm">AI ANALİZÖR</span>
-            </div>
-            <div onclick="switchPage('terminal')" id="m-terminal" class="p-4 rounded-xl cursor-pointer hover:bg-white/5 transition flex items-center gap-4 border border-transparent">
-                <i class="fa-solid fa-terminal text-slate-400"></i> <span class="font-bold text-sm font-mono tracking-tighter">SİSTEM LOGLARI</span>
-            </div>
-        </nav>
-
-        <div class="mt-auto p-4 glass-card rounded-2xl border-dashed">
-            <div class="flex justify-between items-center mb-2">
-                <span class="text-[10px] font-bold text-slate-400">ENCRYPTION STATUS</span>
-                <span class="text-[10px] text-emerald-500 font-bold">SECURE (AES-256)</span>
-            </div>
-            <div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
-                <div class="bg-emerald-500 h-full w-full"></div>
-            </div>
-        </div>
-    </aside>
-
-    <main class="flex-1 overflow-y-auto relative p-10 bg-gradient-to-br from-slate-950 to-blue-950">
-        
-        <div class="flex justify-between items-center mb-12 border-b border-white/5 pb-8">
-            <div>
-                <h2 id="page-title" class="text-4xl font-black tracking-tight">Merkezi Kontrol</h2>
-                <p id="page-desc" class="text-slate-400 font-medium">Tüm sistemler stabil durumda.</p>
-            </div>
-            <div class="flex items-center gap-6">
-                <div class="text-right">
-                    <p class="text-[10px] font-bold text-slate-500">CANLI VERİ AKIŞI</p>
-                    <p id="live-timer" class="mono text-sky-400 font-bold tracking-widest text-lg">00:00:00</p>
-                </div>
-                <button onclick="clearDatabase()" class="bg-red-500/10 text-red-500 p-4 rounded-2xl hover:bg-red-500 hover:text-white transition">
-                    <i class="fa-solid fa-power-off"></i>
-                </button>
-            </div>
-        </div>
-
-        <div id="page-main" class="space-y-8 animate-in fade-in zoom-in duration-300">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div class="glass-card p-6 rounded-3xl">
-                    <p class="text-xs font-bold text-slate-500 uppercase">Aktif Tedarikçi</p>
-                    <h3 id="stat-vendors" class="text-4xl font-black mt-2 tracking-tighter text-sky-400">0</h3>
-                </div>
-                <div class="glass-card p-6 rounded-3xl">
-                    <p class="text-xs font-bold text-slate-500 uppercase">Toplam Varlık</p>
-                    <h3 id="stat-wealth" class="text-4xl font-black mt-2 tracking-tighter text-emerald-400">₺0</h3>
-                </div>
-                <div class="glass-card p-6 rounded-3xl border-l-4 border-pink-500">
-                    <p class="text-xs font-bold text-slate-500 uppercase">Yükleme Kapasitesi</p>
-                    <h3 class="text-4xl font-black mt-2 tracking-tighter">84%</h3>
-                </div>
-                <div class="glass-card p-6 rounded-3xl">
-                    <p class="text-xs font-bold text-slate-500 uppercase">Sistem Isısı</p>
-                    <h3 class="text-4xl font-black mt-2 tracking-tighter text-orange-400">32°C</h3>
-                </div>
-            </div>
-            <div class="glass-card p-10 rounded-[40px]">
-                <canvas id="performanceChart" height="100"></canvas>
-            </div>
-        </div>
-
-        <div id="page-inventory" class="hidden-section space-y-6">
-            <div class="glass-card p-8 rounded-3xl flex gap-4">
-                <input type="text" id="p-name" placeholder="Ürün Adı" class="flex-1 bg-white/5 border-white/10 p-4 rounded-xl outline-none focus:border-sky-400 text-white font-bold">
-                <input type="number" id="p-stock" placeholder="Adet" class="w-32 bg-white/5 border-white/10 p-4 rounded-xl outline-none focus:border-sky-400 text-white font-bold">
-                <input type="number" id="p-price" placeholder="Birim Fiyat" class="w-32 bg-white/5 border-white/10 p-4 rounded-xl outline-none focus:border-sky-400 text-white font-bold">
-                <button onclick="addItem()" class="bg-sky-500 text-white px-8 rounded-xl font-black hover:bg-sky-400 transition btn-glow uppercase">Kaydet</button>
-            </div>
-            <div class="glass-card rounded-[32px] overflow-hidden">
-                <table class="w-full text-left">
-                    <thead class="bg-white/5">
-                        <tr>
-                            <th class="p-6 text-xs font-black text-slate-400 uppercase tracking-widest">Ürün Kimliği</th>
-                            <th class="p-6 text-xs font-black text-slate-400 uppercase tracking-widest">İsim</th>
-                            <th class="p-6 text-xs font-black text-slate-400 uppercase tracking-widest">Stok</th>
-                            <th class="p-6 text-xs font-black text-slate-400 uppercase tracking-widest">Maliyet</th>
-                            <th class="p-6 text-xs font-black text-slate-400 uppercase tracking-widest">İşlem</th>
-                        </tr>
-                    </thead>
-                    <tbody id="inventory-list" class="mono text-sm"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="page-accounting" class="hidden-section grid grid-cols-2 gap-10">
-            <div class="glass-card p-10 rounded-[40px] text-center">
-                <div class="w-24 h-24 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <i class="fa-solid fa-vault text-4xl text-emerald-500"></i>
-                </div>
-                <h4 class="text-sm font-black text-slate-500 uppercase tracking-widest">Kasa Bakiyesi</h4>
-                <h3 id="vault-balance" class="text-6xl font-black text-white mt-4 tracking-tighter font-mono">₺0</h3>
-            </div>
-            <div class="glass-card p-10 rounded-[40px]">
-                <h4 class="font-black text-xl mb-6">Finansal Loglar</h4>
-                <div id="finance-logs" class="space-y-4 max-h-[300px] overflow-y-auto pr-4"></div>
-            </div>
-        </div>
-
-        <div id="page-ai" class="hidden-section text-center py-20">
-            <div class="relative inline-block mb-10">
-                <div class="absolute inset-0 bg-pink-500 blur-3xl opacity-20 animate-pulse"></div>
-                <i class="fa-solid fa-brain text-9xl text-pink-500 relative z-10"></i>
-            </div>
-            <h3 class="text-4xl font-black mb-4">TedarikHub Quantum AI</h3>
-            <p id="ai-response" class="text-xl text-slate-400 max-w-2xl mx-auto italic font-medium">"Veri girişi bekleniyor. En az 3 ürün eklediğinizde karlılık analizi yapabilirim."</p>
-        </div>
-
-        <div id="page-terminal" class="hidden-section glass-card rounded-3xl p-8 mono h-[600px] overflow-hidden flex flex-col">
-            <div class="flex gap-2 mb-4 border-b border-white/5 pb-4 text-xs font-bold text-slate-500 uppercase tracking-[3px]">
-                <span class="w-3 h-3 bg-red-500 rounded-full"></span>
-                <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
-                <span class="w-3 h-3 bg-green-500 rounded-full"></span>
-                <span class="ml-4">SYSTEM DEBUG CONSOLE</span>
-            </div>
-            <div id="terminal-content" class="flex-grow overflow-y-auto text-[12px] space-y-1 terminal-text"></div>
-        </div>
-
-    </main>
-
-    <script>
-        // --- QUANTUM SİSTEM ÇEKİRDEĞİ ---
-        let storage = JSON.parse(localStorage.getItem('th_quantum_v4')) || { inventory: [], transactions: [] };
-        
-        function bootSystem() {
-            logTerminal("Sistem önyüklemesi başlatıldı...");
-            logTerminal("Şifreleme anahtarları yüklendi (AES-256).");
-            logTerminal("Local Database senkronize edildi.");
-            updateUI();
-            startClock();
-            logTerminal("Tüm sistemler aktif. Erişim onaylandı.");
-        }
-
-        function switchPage(pageId) {
-            document.querySelectorAll('main > div[id^="page-"]').forEach(p => p.classList.add('hidden-section'));
-            document.getElementById('page-' + pageId).classList.remove('hidden-section');
-            document.querySelectorAll('aside nav div').forEach(d => d.style.background = 'transparent');
-            document.getElementById('m-' + pageId).style.background = 'rgba(255,255,255,0.05)';
-            
-            const meta = {
-                'main': ['Merkezi Kontrol', 'Sistem genel durum analitiği.'],
-                'inventory': ['Stok Yönetimi', 'Tüm tedarik ve envanter akışları.'],
-                'accounting': ['Finansal Kasa', 'Cüzdan ve işlem geçmişi.'],
-                'ai': ['Yapay Zeka Analiz', 'Otonom ticaret öngörüleri.'],
-                'terminal': ['Sistem Terminali', 'Ham veri ve log akışı.']
-            };
-            document.getElementById('page-title').innerText = meta[pageId][0];
-            document.getElementById('page-desc').innerText = meta[pageId][1];
-            logTerminal(`Sekme değiştirildi: ${meta[pageId][0]}`);
-            if(pageId === 'ai') runAI();
-        }
-
-        // --- STOK MOTORU ---
-        function addItem() {
-            const name = document.getElementById('p-name').value;
-            const stock = parseInt(document.getElementById('p-stock').value);
-            const price = parseFloat(document.getElementById('p-price').value);
-
-            if(!name || isNaN(stock) || isNaN(price)) {
-                logTerminal("HATA: Hatalı veri girişi. Kayıt iptal edildi.", "text-red-500");
-                return;
-            }
-
-            const item = { id: 'TR-' + Math.floor(Math.random()*99999), name, stock, price };
-            storage.inventory.push(item);
-            storage.transactions.push({ time: new Date().toLocaleTimeString(), type: 'Giriş', msg: `${name} envantere eklendi.`, val: stock * price });
-            
-            save();
-            updateUI();
-            logTerminal(`Envanter Güncellendi: ${name} (x${stock})`);
-            
-            document.getElementById('p-name').value = '';
-            document.getElementById('p-stock').value = '';
-            document.getElementById('p-price').value = '';
-        }
-
-        function deleteItem(id) {
-            storage.inventory = storage.inventory.filter(i => i.id !== id);
-            save();
-            updateUI();
-            logTerminal(`Kayıt Silindi: ID ${id}`, "text-orange-500");
-        }
-
-        // --- ANALİZ VE AI MOTORU ---
-        function runAI() {
-            const aiText = document.getElementById('ai-response');
-            if(storage.inventory.length < 3) {
-                aiText.innerText = "Yeterli veri yok. AI analizi için en az 3 farklı ürün kategorisi girin.";
-                return;
-            }
-            aiText.innerText = "Hesaplanıyor...";
-            setTimeout(() => {
-                const top = storage.inventory.reduce((a, b) => a.price > b.price ? a : b);
-                aiText.innerHTML = `<span class="text-pink-400">Quantum AI Öngörüsü:</span> "${top.name} kategorisinde stok maliyetiniz yüksek. Pazar analizine göre bu ay %15 indirim yaparak likiditeyi artırmanızı öneririm."`;
-                logTerminal("AI Analiz Motoru başarıyla çalıştırıldı.");
-            }, 1000);
-        }
-
-        // --- YARDIMCI SİSTEMLER ---
-        function updateUI() {
-            // Stats
-            document.getElementById('stat-vendors').innerText = storage.inventory.length;
-            const total = storage.inventory.reduce((s, i) => s + (i.stock * i.price), 0);
-            document.getElementById('stat-wealth').innerText = '₺' + total.toLocaleString();
-            document.getElementById('vault-balance').innerText = '₺' + total.toLocaleString();
-
-            // Inventory List
-            const list = document.getElementById('inventory-list');
-            list.innerHTML = storage.inventory.map(i => `
-                <tr class="border-b border-white/5 hover:bg-white/5 transition">
-                    <td class="p-6 text-slate-500 font-bold">${i.id}</td>
-                    <td class="p-6 text-white font-black">${i.name}</td>
-                    <td class="p-6 text-sky-400 font-bold">${i.stock} ADT</td>
-                    <td class="p-6 text-emerald-400 font-bold">₺${i.price.toLocaleString()}</td>
-                    <td class="p-6"><button onclick="deleteItem('${i.id}')" class="text-red-400 hover:scale-125 transition"><i class="fa-solid fa-trash-can"></i></button></td>
-                </tr>
-            `).join('');
-
-            // Finance Logs
-            document.getElementById('finance-logs').innerHTML = storage.transactions.map(t => `
-                <div class="p-4 bg-white/5 rounded-xl border-l-4 border-emerald-500">
-                    <div class="flex justify-between font-bold text-xs mb-1"><span>${t.msg}</span><span class="text-slate-500">${t.time}</span></div>
-                    <div class="text-emerald-400 font-black">+ ₺${t.val.toLocaleString()}</div>
-                </div>
-            `).reverse().join('');
-
-            updateChart(storage.inventory);
-        }
-
-        function save() {
-            localStorage.setItem('th_quantum_v4', JSON.stringify(storage));
-        }
-
-        function logTerminal(msg, colorClass = "terminal-text") {
-            const term = document.getElementById('terminal-content');
-            const time = new Date().toLocaleTimeString();
-            term.innerHTML += `<div class="${colorClass}">[${time}] > ${msg}</div>`;
-            term.scrollTop = term.scrollHeight;
-        }
-
-        function startClock() {
-            setInterval(() => {
-                document.getElementById('live-timer').innerText = new Date().toLocaleTimeString();
-            }, 1000);
-        }
-
-        function clearDatabase() {
-            if(confirm("DİKKAT: Tüm veritabanı şifreleri ve kayıtlar kalıcı olarak silinecek. Onaylıyor musunuz?")) {
-                localStorage.removeItem('th_quantum_v4');
-                storage = { inventory: [], transactions: [] };
-                updateUI();
-                logTerminal("SİSTEM RESETLENDİ: Tüm veriler temizlendi.", "text-red-500");
-                location.reload();
-            }
-        }
-
-        let myChart;
-        function updateChart(data) {
-            const ctx = document.getElementById('performanceChart').getContext('2d');
-            if (myChart) myChart.destroy();
-            myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: data.map(i => i.name),
-                    datasets: [{
-                        label: 'Kategori Hacmi',
-                        data: data.map(i => i.stock * i.price),
-                        borderColor: '#38bdf8',
-                        borderWidth: 5,
-                        tension: 0.4,
-                        fill: true,
-                        backgroundColor: 'rgba(56, 189, 248, 0.1)'
-                    }]
-                },
-                options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { color: 'rgba(255,255,255,0.05)' } } } }
-            });
-        }
-
-        bootSystem();
-    </script>
-</body>
-</html>
-!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TedarikHub OS | Secure Access</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&display=swap" rel="stylesheet">
-    <style>
-        :root { --bg: #020617; --accent: #38bdf8; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: white; overflow: hidden; }
-        .login-card { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(56, 189, 248, 0.2); }
         .hidden-section { display: none !important; }
-        input { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; }
-        .sidebar { background: #0f172a; border-right: 1px solid rgba(255,255,255,0.05); }
+
+        /* ULTIMA BRUTALISM v2: Daha Sert, Daha Kalın, Daha Keskin */
+        input, select { border: 12px solid var(--black) !important; padding: 25px; font-weight: 900; font-size: 1.5rem; background: transparent; transition: 0.1s; }
+        input:focus { background: var(--black); color: var(--white); box-shadow: 20px 20px 0px #eee; }
+        
+        button { border: 12px solid var(--black); padding: 25px 50px; font-weight: 900; text-transform: uppercase; background: var(--white); letter-spacing: 8px; font-size: 14px; position: relative; }
+        button:hover { background: var(--black); color: var(--white); transform: translate(-12px, -12px); box-shadow: 15px 15px 0px #ccc; }
+        button:active { transform: translate(0,0); box-shadow: none; }
+        
+        .nav-item { border-left: 20px solid transparent; padding: 30px; cursor: pointer; font-weight: 900; font-size: 12px; letter-spacing: 6px; border-bottom: 4px solid #000; transition: 0.2s; text-transform: uppercase; }
+        .active-nav { border-left-color: var(--black); background: #000; color: #fff; }
+        
+        .card-ultima { border: 12px solid var(--black); padding: 50px; box-shadow: 30px 30px 0px #000; background: var(--white); position: relative; }
+        .card-ultima::before { content: "ULTIMA_STAMP"; position: absolute; top: 10px; right: 10px; font-size: 8px; font-weight: 900; opacity: 0.2; }
+        
+        .stock-alert { background: #ff0000 !important; color: white !important; animation: blink 1s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        
+        ::-webkit-scrollbar { width: 15px; }
+        ::-webkit-scrollbar-track { background: #fff; }
+        ::-webkit-scrollbar-thumb { background: #000; border: 4px solid #fff; }
     </style>
 </head>
 <body class="h-screen w-screen flex">
 
-    <div id="auth-gateway" class="fixed inset-0 z-[1000] flex items-center justify-center bg-slate-950 p-6">
-        <div class="login-card w-full max-w-md p-10 rounded-[40px] shadow-2xl text-center">
-            <div class="w-20 h-20 bg-sky-500 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-lg shadow-sky-500/20">
-                <i class="fa-solid fa-lock text-3xl text-white"></i>
+    <div id="auth-gate" class="fixed inset-0 z-[10000] flex items-center justify-center bg-white">
+        <div class="w-full max-w-2xl p-20 border-[25px] border-black bg-white shadow-[80px_80px_0px_0px_#000]">
+            <div class="flex justify-between items-start mb-16">
+                <h1 class="text-9xl font-[1000] tracking-[ -15px] italic uppercase leading-none">V.2</h1>
+                <div class="text-right mono text-[10px] font-black tracking-widest uppercase">
+                    Version: ULTIMA_2026<br>Protocol: VAKKO_V2<br>Status: DEAD_SECURE
+                </div>
             </div>
-            <h2 id="auth-title" class="text-3xl font-black mb-2 tracking-tighter">Sistem Erişimi</h2>
-            <p id="auth-desc" class="text-slate-400 font-medium mb-8 text-sm uppercase tracking-[2px]">Lütfen giriş yapın</p>
-            
-            <form id="auth-form" class="space-y-4 text-left">
-                <div>
-                    <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Kullanıcı Adı</label>
-                    <input type="text" id="username" required class="w-full p-4 rounded-2xl outline-none focus:border-sky-500 transition mt-1">
-                </div>
-                <div>
-                    <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Güvenli Şifre</label>
-                    <input type="password" id="password" required class="w-full p-4 rounded-2xl outline-none focus:border-sky-500 transition mt-1">
-                </div>
-                <button type="submit" class="w-full bg-sky-500 text-white font-black p-5 rounded-2xl mt-4 hover:bg-sky-400 transition shadow-xl shadow-sky-500/20 uppercase tracking-widest">Sistemi Aç</button>
+            <form id="auth-form" class="space-y-8">
+                <input type="text" id="op-id" placeholder="IDENTITY_CODE" required class="w-full">
+                <input type="password" id="op-key" placeholder="CIPHER_KEY" required class="w-full">
+                <button type="submit" class="w-full text-5xl py-12">INITIALIZE</button>
             </form>
-            <p id="auth-error" class="text-red-500 text-xs font-bold mt-4 hidden">Hatalı kimlik bilgileri!</p>
         </div>
     </div>
 
-    <div id="main-system" class="hidden-section flex h-full w-full">
-        <aside class="sidebar w-72 flex flex-col p-8">
-            <div class="flex items-center gap-3 mb-12">
-                <div class="w-10 h-10 bg-sky-500 rounded-xl flex items-center justify-center text-white shadow-lg"><i class="fa-solid fa-bolt"></i></div>
-                <span class="text-xl font-black tracking-tighter">TH-OS</span>
+    <div id="app" class="hidden-section flex h-full w-full">
+        <aside class="w-[450px] border-r-[15px] border-black flex flex-col no-print bg-white">
+            <div class="p-14 border-b-[15px] border-black bg-black text-white">
+                <h1 class="text-4xl font-[1000] tracking-tighter uppercase italic">TEDARİKHUB</h1>
+                <div class="mt-4 flex items-center gap-3">
+                    <span class="w-3 h-3 bg-red-600 rounded-full animate-ping"></span>
+                    <span class="mono text-[9px] font-bold tracking-[6px] uppercase opacity-50">Singularity_Active</span>
+                </div>
             </div>
-            <nav class="space-y-4">
-                <div onclick="showTab('dash')" class="p-4 bg-sky-500 text-white rounded-2xl font-bold cursor-pointer transition">Panel</div>
-                <div onclick="logout()" class="p-4 text-slate-500 hover:text-red-400 font-bold cursor-pointer transition uppercase text-xs tracking-widest mt-20 border-t border-white/5 pt-8">Güvenli Çıkış</div>
+            <nav class="flex-grow overflow-y-auto">
+                <div onclick="tab('dash')" id="t-dash" class="nav-item active-nav">01 // WAR_ROOM</div>
+                <div onclick="tab('inv')" id="t-inv" class="nav-item">02 // ASSET_STATION</div>
+                <div onclick="tab('fin')" id="t-fin" class="nav-item">03 // PROFIT_PULSE</div>
+                <div onclick="tab('bill')" id="t-bill" class="nav-item">04 // LEGAL_BILLING</div>
+                <div onclick="tab('core')" id="t-core" class="nav-item">05 // SYSTEM_VOID</div>
             </nav>
+            <div class="p-10 border-t-[15px] border-black space-y-6 bg-gray-50">
+                <div class="flex justify-between mono text-xs font-black uppercase"><span>Sync_Node:</span><span id="load-val">0%</span></div>
+                <div class="h-6 border-4 border-black p-1"><div id="load-bar" class="h-full bg-black transition-all duration-700"></div></div>
+                <button onclick="logout()" class="w-full p-6 text-xs font-black text-red-600 border-4 border-red-600 uppercase hover:bg-red-600 hover:text-white">Emergency_Purge</button>
+            </div>
         </aside>
 
-        <main class="flex-1 p-12 overflow-y-auto bg-slate-900">
-            <div class="flex justify-between items-center mb-12">
-                <h2 class="text-4xl font-black tracking-tight">Yönetim Paneli</h2>
-                <div class="flex items-center gap-4 bg-slate-800 p-2 px-6 rounded-full border border-white/5">
-                    <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                    <span id="user-display" class="text-xs font-black uppercase text-slate-300 tracking-widest">OTURUM AÇIK</span>
+        <main class="flex-1 overflow-y-auto bg-[#eee] flex flex-col">
+            <header class="p-14 border-b-[15px] border-black flex justify-between items-end sticky top-0 bg-white z-50 no-print">
+                <div>
+                    <h2 id="view-title" class="text-9xl font-[1000] tracking-tighter uppercase italic leading-none">WAR_ROOM</h2>
+                    <p class="mono text-xs font-bold tracking-[12px] mt-6 opacity-30 uppercase">Enterprise OS // KayseriHQ // Global_v.2.0.26</p>
                 </div>
+                <div class="flex gap-8">
+                    <input type="text" id="search" onkeyup="search()" placeholder="SCAN_DATABASE..." class="!p-4 text-xs w-96 border-4 font-black">
+                    <button onclick="exportX()" class="bg-black text-white px-10">XLSX_EXPORT</button>
+                </div>
+            </header>
+
+            <div class="p-20 space-y-20">
+                <section id="s-dash" class="space-y-20 animate-in fade-in zoom-in duration-500">
+                    <div class="grid grid-cols-4 gap-12">
+                        <div class="card-ultima"><p class="text-[10px] font-black opacity-30 uppercase tracking-[5px]">Assets</p><h3 id="stat-c" class="text-9xl font-[1000] mt-6 mono">0</h3></div>
+                        <div class="card-ultima"><p class="text-[10px] font-black opacity-30 uppercase tracking-[5px]">Valuation</p><h3 id="stat-v" class="text-7xl font-[1000] mt-6 mono text-blue-700">₺0</h3></div>
+                        <div class="card-ultima border-green-600"><p class="text-[10px] font-black text-green-600 uppercase tracking-[5px]">Net_Profit</p><h3 id="stat-p" class="text-7xl font-[1000] mt-6 mono text-green-600">₺0</h3></div>
+                        <div class="card-ultima bg-black text-white"><p class="text-[10px] font-black opacity-40 uppercase text-center tracking-[5px]">Status</p><h3 class="text-6xl font-[1000] mt-6 mono text-center animate-pulse">OPTIMAL</h3></div>
+                    </div>
+                    <div class="card-ultima">
+                        <h4 class="text-xs font-black uppercase mb-14 tracking-[20px] opacity-20 text-center italic">Market_Trajectory_Simulation</h4>
+                        <canvas id="vChart" height="90"></canvas>
+                    </div>
+                </section>
+
+                <section id="s-inv" class="hidden-section space-y-12">
+                    <div class="card-ultima bg-gray-100">
+                        <h4 class="text-4xl font-[1000] uppercase mb-12 border-b-8 border-black pb-8 italic">Data_Injection_Port</h4>
+                        <div class="grid grid-cols-4 gap-6">
+                            <input type="text" id="in-n" placeholder="Asset_Name" class="col-span-2">
+                            <input type="number" id="in-b" placeholder="Buy_Cost">
+                            <input type="number" id="in-s" placeholder="Sell_Target">
+                            <input type="number" id="in-q" placeholder="Qty_Stock">
+                            <input type="text" id="in-i" placeholder="Asset_Image_URL" class="col-span-3">
+                            <button onclick="add()" class="bg-black text-white font-black text-2xl">INJECT_DATA</button>
+                        </div>
+                    </div>
+                    <div class="card-ultima !p-0 overflow-hidden">
+                        <table class="w-full text-left">
+                            <thead class="bg-black text-white text-[10px] font-black uppercase tracking-[10px]">
+                                <tr><th class="p-12">Visual</th><th class="p-12">Identification</th><th class="p-12">Inventory</th><th class="p-12 text-center">Efficiency</th><th class="p-12 text-right">Control</th></tr>
+                            </thead>
+                            <tbody id="list" class="mono text-sm font-black divide-y-[12px] divide-[#eee] bg-white"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="s-fin" class="hidden-section grid grid-cols-2 gap-20">
+                    <div class="card-ultima text-center flex flex-col justify-center py-32 bg-white">
+                        <h4 class="text-[10px] font-black uppercase opacity-20 tracking-[25px] mb-12">Profit_Yield_Index</h4>
+                        <div id="v-margin" class="text-[200px] font-[1000] mono text-blue-700 leading-none tracking-tighter">%0</div>
+                    </div>
+                    <div class="card-ultima bg-black text-white flex flex-col justify-between p-20">
+                        <div>
+                            <h4 class="text-[10px] font-black uppercase tracking-[15px] opacity-40 italic underline mb-10">TITAN_AI_ADVISOR_V.2</h4>
+                            <p id="v-advice" class="text-6xl font-[1000] italic leading-tight">"Awaiting_Database_Injection..."</p>
+                        </div>
+                        <div class="pt-16 border-t-4 border-gray-800 flex justify-between items-end">
+                            <div class="mono text-[10px] opacity-40 uppercase">Encrypted: AES-TITAN-X<br>Verified_By: Gemini_Core</div>
+                            <i class="fa-solid fa-shredder text-[150px] opacity-10"></i>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="s-bill" class="hidden-section max-w-5xl mx-auto w-full bg-white border-[20px] border-black p-24 shadow-[60px_60px_0px_0px_#000]">
+                    <div class="flex justify-between border-b-[15px] border-black pb-16 mb-16">
+                        <div>
+                            <h3 class="text-9xl font-[1000] italic uppercase underline decoration-[20px] tracking-tighter">BILLING</h3>
+                            <p class="mono text-xs font-bold mt-6 opacity-40 tracking-[10px]">SYS_CODE: OMEGA_TITAN_2026_V2</p>
+                        </div>
+                        <div class="text-right uppercase font-[1000]">
+                            <h4 class="text-3xl">TedarikHub Enterprise</h4>
+                            <p class="text-xs opacity-50 tracking-[5px] mt-2 italic">Global_Logistics_HQ // Kayseri</p>
+                        </div>
+                    </div>
+                    <div id="b-list" class="space-y-10 mb-20 mono text-3xl font-black italic">
+                        <p class="text-center opacity-10 uppercase tracking-[20px] py-20">No_Data_Buffer</p>
+                    </div>
+                    <div class="border-t-[15px] border-black pt-16 flex justify-between items-center">
+                        <div><p class="text-xs font-black opacity-30 uppercase tracking-[10px]">Total_Liability</p><h3 id="b-total" class="text-[120px] font-[1000] mono tracking-tighter leading-none">₺0</h3></div>
+                        <button onclick="window.print()" class="p-12 bg-black text-white px-24 text-2xl no-print italic">PRINT_EXEC</button>
+                    </div>
+                </section>
+
+                <section id="s-core" class="hidden-section max-w-4xl mx-auto text-center space-y-20 py-24">
+                    <div class="card-ultima border-red-600">
+                        <i class="fa-solid fa-atom text-[200px] mb-16 animate-spin" style="animation-duration: 15s;"></i>
+                        <h3 class="text-7xl font-[1000] uppercase italic mb-12 tracking-tighter">System_Void_Control</h3>
+                        <div class="grid grid-cols-2 gap-10">
+                            <button onclick="bak()" class="p-10 bg-black text-white text-xl">EXPORT_VAULT</button>
+                            <button onclick="document.getElementById('f-in').click()" class="p-10 text-xl font-black">IMPORT_VAULT</button>
+                            <input type="file" id="f-in" class="hidden" onchange="res(event)">
+                        </div>
+                        <button onclick="nuke()" class="w-full mt-16 p-12 bg-red-600 text-white text-3xl font-black italic">WIPE_TOTAL_MEMORY</button>
+                    </div>
+                </section>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white/5 p-10 rounded-[40px] border border-white/5">
-                    <p class="text-xs font-black text-slate-500 uppercase mb-2">Sistem Durumu</p>
-                    <h3 class="text-3xl font-black text-emerald-400 tracking-tighter uppercase">Güvenli</h3>
-                </div>
-                </div>
         </main>
     </div>
 
     <script>
-        // --- GÜVENLİK MOTORU (AUTH ENGINE) ---
-        const authData = JSON.parse(localStorage.getItem('th_auth')) || null;
+        // --- THE OMEGA ENGINE v2.026 ---
+        let db = JSON.parse(localStorage.getItem('th_ultima_db')) || [];
+        const auth = JSON.parse(localStorage.getItem('th_ultima_auth')) || null;
 
         window.onload = () => {
-            if(!authData) {
-                // İlk kurulum: Kayıt moduna geç
-                document.getElementById('auth-title').innerText = "İlk Kurulum";
-                document.getElementById('auth-desc').innerText = "Yönetici şifrenizi oluşturun";
-            }
-        }
+            if(sessionStorage.getItem('th_u_session') === '1') unlock();
+            up();
+        };
 
+        // ACCESS CONTROL
         document.getElementById('auth-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            const u = document.getElementById('username').value;
-            const p = document.getElementById('password').value;
-            const err = document.getElementById('auth-error');
-
-            if(!authData) {
-                // İlk defa şifre oluşturuluyor
-                localStorage.setItem('th_auth', JSON.stringify({ user: u, pass: p }));
-                alert("Şifreniz başarıyla oluşturuldu! Şimdi giriş yapın.");
-                location.reload();
-            } else {
-                // Giriş kontrolü
-                if(u === authData.user && p === authData.pass) {
-                    sessionStorage.setItem('th_logged_in', 'true');
-                    unlockSystem(u);
-                } else {
-                    err.classList.remove('hidden');
-                }
-            }
+            const u = document.getElementById('op-id').value;
+            const k = document.getElementById('op-key').value;
+            if(!auth) {
+                localStorage.setItem('th_ultima_auth', JSON.stringify({u, k}));
+                alert("CORE_INITIALIZED. RE-CONNECT NOW."); location.reload();
+            } else if(u === auth.u && k === auth.k) {
+                sessionStorage.setItem('th_u_session', '1');
+                unlock();
+            } else { alert("ACCESS_VIOLATION: INVALID_CIPHER."); }
         });
 
-        function unlockSystem(user) {
-            document.getElementById('auth-gateway').classList.add('hidden-section');
-            document.getElementById('main-system').classList.remove('hidden-section');
-            document.getElementById('user-display').innerText = user;
+        function unlock() {
+            document.getElementById('auth-gate').classList.add('hidden-section');
+            document.getElementById('app').classList.remove('hidden-section');
         }
 
-        function logout() {
-            sessionStorage.removeItem('th_logged_in');
-            location.reload();
+        function logout() { sessionStorage.clear(); location.reload(); }
+
+        // CORE LOGIC
+        function add() {
+            const n = document.getElementById('in-n').value, b = parseFloat(document.getElementById('in-b').value), s = parseFloat(document.getElementById('in-s').value), q = parseInt(document.getElementById('in-q').value), i = document.getElementById('in-i').value || 'https://via.placeholder.com/200/000/fff?text=TITAN_V2';
+            if(!n || isNaN(b) || isNaN(s) || isNaN(q)) return;
+            db.push({id: 'QX-'+Math.floor(100000+Math.random()*899999), n, b, s, q, i, m: (((s-b)/b)*100).toFixed(1)});
+            save(); up();
+            ['in-n','in-b','in-s','in-q','in-i'].forEach(f => document.getElementById(f).value = '');
         }
 
-        // Sayfa yüklendiğinde oturum kontrolü
-        if(sessionStorage.getItem('th_logged_in') === 'true') {
-            unlockSystem(authData ? authData.user : 'Admin');
+        function del(id) { db = db.filter(x => x.id !== id); save(); up(); }
+        function save() { localStorage.setItem('th_ultima_db', JSON.stringify(db)); }
+
+        function up() {
+            const val = db.reduce((a, x) => a + (x.s * x.q), 0);
+            const profit = db.reduce((a, x) => a + ((x.s - x.b) * x.q), 0);
+            document.getElementById('stat-c').innerText = db.length;
+            document.getElementById('stat-v').innerText = '₺' + val.toLocaleString();
+            document.getElementById('stat-p').innerText = '₺' + profit.toLocaleString();
+            
+            const load = Math.min(db.length * 2.5, 100);
+            document.getElementById('load-bar').style.width = load + '%';
+            document.getElementById('load-val').innerText = load + '%';
+            
+            render(); chart(); finance(); invoice(val);
+        }
+
+        function render() {
+            document.getElementById('list').innerHTML = db.map(x => `
+                <tr class="hover:bg-black hover:text-white transition duration-200 border-b-[15px] border-gray-100 ${x.q < 5 ? 'stock-alert' : ''}">
+                    <td class="p-12"><img src="${x.i}" class="w-28 h-28 border-8 border-black shadow-2xl object-cover bg-white"></td>
+                    <td class="p-12 uppercase">
+                        <span class="mono text-[10px] opacity-40 block mb-3 font-black tracking-widest italic">UUID: ${x.id}</span>
+                        <h5 class="text-4xl font-[1000] italic tracking-tighter leading-none">${x.n}</h5>
+                    </td>
+                    <td class="p-12 text-6xl font-[1000] italic">${x.q} <span class="text-xs opacity-30">UNIT</span></td>
+                    <td class="p-12 text-center"><span class="bg-black text-white p-5 px-10 text-xs font-[1000] italic tracking-widest uppercase">%${x.m} PROFIT</span></td>
+                    <td class="p-12 text-right"><button onclick="del('${x.id}')" class="p-4 px-10 text-red-600 border-none bg-red-50 hover:bg-black hover:text-white transition font-black">PURGE</button></td>
+                </tr>
+            `).join('');
+        }
+
+        function invoice(total) {
+            document.getElementById('b-total').innerText = '₺' + total.toLocaleString();
+            const inv = document.getElementById('b-list');
+            if(db.length === 0) { inv.innerHTML = '<p class="text-center opacity-10 uppercase tracking-[20px] py-20">No_Data_Buffer</p>'; return; }
+            inv.innerHTML = db.map(x => `
+                <div class="flex justify-between border-b-[8px] border-black pb-6 uppercase italic">
+                    <span class="font-[1000]">${x.n} [QUANTITY: ${x.q}]</span>
+                    <span class="mono text-4xl">₺${(x.s*x.q).toLocaleString()}</span>
+                </div>
+            `).join('');
+        }
+
+        function finance() {
+            if(db.length === 0) return;
+            const avg = (db.reduce((a, x) => a + parseFloat(x.m), 0) / db.length).toFixed(1);
+            document.getElementById('v-margin').innerText = '%' + avg;
+            document.getElementById('v-advice').innerText = avg > 50 ? "SYSTEM_STATUS: DOMINANT. EXPAND_TITAN_NODE_IMMEDIATELY." : "WARNING: EFFICIENCY_LOSS. RECALIBRATE_SUPPLY_CHAIN.";
+        }
+
+        function search() {
+            const k = document.getElementById('search').value.toLowerCase();
+            const filt = db.filter(x => x.n.toLowerCase().includes(k));
+            // Reuse render logic for filtered
+        }
+
+        function exportX() {
+            const ws = XLSX.utils.json_to_sheet(db);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "TITAN_V2");
+            XLSX.writeFile(wb, "TH_ULTIMA_V2_2026.xlsx");
+        }
+
+        function bak() {
+            const ds = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+            const dl = document.createElement('a'); dl.setAttribute("href", ds); dl.setAttribute("download", "th_ultima_vault.json"); dl.click();
+        }
+
+        function res(e) {
+            const r = new FileReader(); r.onload = (ev) => { db = JSON.parse(ev.target.result); save(); up(); }; r.readAsText(e.target.files[0]);
+        }
+
+        function nuke() { if(confirm("CRITICAL: WIPE_ALL_CORE_DATA?")) { localStorage.clear(); location.reload(); } }
+
+        function tab(id) {
+            document.querySelectorAll('main section').forEach(s => s.classList.add('hidden-section'));
+            document.getElementById('s-' + id).classList.remove('hidden-section');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
+            document.getElementById('t-' + id).classList.add('active-nav');
+            document.getElementById('view-title').innerText = id === 'dash' ? 'WAR_ROOM' : (id === 'inv' ? 'ASSET_STATION' : (id === 'fin' ? 'PROFIT_PULSE' : (id === 'bill' ? 'BILLING' : 'VOID')));
+        }
+
+        let myC;
+        function chart() {
+            const ctx = document.getElementById('vChart').getContext('2d');
+            if (myC) myC.destroy();
+            myC = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: db.map(x => x.n),
+                    datasets: [{ label: 'Valuation', data: db.map(x => x.s * x.q), borderColor: '#000', borderWidth: 25, fill: false, tension: 0, pointRadius: 20, pointBackgroundColor: '#000' }]
+                },
+                options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { color: 'rgba(0,0,0,0.2)', lineWidth: 10 } } } }
+            });
         }
     </script>
 </body>
